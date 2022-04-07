@@ -1,18 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function Movie({ id, medium_cover_image, title, summary, genres }: any) {
+function Movie({ id, medium_cover_image, title, summary, genres, year }: any) {
   return (
     <div>
+      <img src={medium_cover_image} alt={title} />
       <div>
-        <img src={medium_cover_image} alt="" />
         <h2>
-          <Link to={`/movie/${id}`}>{title}</Link>
+          <Link to={`/nomad_study/movie/${id}`}>{title}</Link>
         </h2>
-        <p>{summary}</p>
+        <h3>{year}</h3>
+        <p>{summary.length > 235 ? `${summary.slice(0, 235)}...` : summary}</p>
         <ul>
           {genres.map((g: any) => (
-            <li key={g}>g</li>
+            <li key={g}>{g}</li>
           ))}
         </ul>
       </div>
