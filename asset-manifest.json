@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/nomad_study/static/css/main.cb1eb7ef.css",
+    "main.js": "/nomad_study/static/js/main.7198b960.js",
+    "index.html": "/nomad_study/index.html",
+    "main.cb1eb7ef.css.map": "/nomad_study/static/css/main.cb1eb7ef.css.map",
+    "main.7198b960.js.map": "/nomad_study/static/js/main.7198b960.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cb1eb7ef.css",
+    "static/js/main.7198b960.js"
+  ]
+}
