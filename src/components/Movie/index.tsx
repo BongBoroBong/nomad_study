@@ -7,7 +7,7 @@ function Movie({ id, medium_cover_image, title, summary, genres, year }: any) {
       <img src={medium_cover_image} alt={title} />
       <div>
         <h2>
-          <Link to={`/nomad_study/movie/${id}`}>{title}</Link>
+          <Link to={`/movie/${id}`}>{title}</Link>
         </h2>
         <h3>{year}</h3>
         <p>{summary.length > 235 ? `${summary.slice(0, 235)}...` : summary}</p>

@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   width: 100vw;
   justify-content: center;
   align-items: center;
-  background-color: ${(props: any) => props.theme.backgroundColor};
+  background-color: ${(props:any) => props.theme.backgroundColor};
 `;
 
 function Home() {
