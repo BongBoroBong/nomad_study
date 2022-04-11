@@ -14,6 +14,7 @@ export interface CoinInterface {
 
 const Container = styled.div`
   padding: 0 10px;
+  background-color: #111;
 `;
 
 const Header = styled.div`
@@ -27,13 +28,33 @@ const Title = styled.h1`
   font-size: 48px;
 `;
 
-const CoinList = styled.ul``;
+const CoinList = styled.ul`
+  list-style: none;
+`;
 
-const Coin = styled.li``;
+const Coin = styled.li`
+  background-color: white;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  a {
+    display: flex;
+    padding: 20px;
+    align-items: center;
+  }
+  &: hover {
+
+  }
+`;
 
 const Img = styled.img`
   width: 25px;
   height: 25px;
+  margin-right: 10px;
+`;
+
+const Loader = styled.span`
+  text-align: center;
+  display: block;
 `;
 
 function Coins() {
@@ -55,13 +76,13 @@ function Coins() {
         <Title>코인</Title>
       </Header>
       {loading ? (
-        'Loading...'
+        <Loader>Loading...</Loader>
       ) : (
         <CoinList>
           {coins.slice(0, 20).map(coin => {
             return (
               <Coin key={coin.id}>
-                <Link to={`/coin/:${coin.id}`} state={coin}>
+                <Link to={`/coin/${coin.id}`} state={coin}>
                   <Img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`} />
                   {coin.name}
                 </Link>
