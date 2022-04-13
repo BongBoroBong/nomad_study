@@ -1,7 +1,11 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-const Price = () => {
+interface PriceProps {
+  coinId: string;
+}
+
+const Price = ({}: PriceProps) => {
   return (
     <div>
       Price

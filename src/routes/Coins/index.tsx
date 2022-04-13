@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import styled from '@emotion/styled';
+import React from 'react';
 import { Link } from 'react-router-dom';
+import { useQuery } from 'react-query';
+import styled from '@emotion/styled';
+import { fetchCoins } from '../../libs/api';
+import { Helmet } from 'react-helmet';
 
-export interface CoinInterface {
+export interface ICoin {
   id: string;
   is_active: boolean;
   is_new: boolean;
@@ -58,28 +61,20 @@ const Loader = styled.span`
 `;
 
 function Coins() {
-  const [coins, setCoins] = useState<CoinInterface[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch('https://api.coinpaprika.com/v1/coins')
-      .then(response => response.json())
-      .then(json => {
-        setCoins(json);
-        setLoading(false);
-      });
-  }, []);
-
+  const { isLoading, data } = useQuery<ICoin[]>('allCoins', fetchCoins);
   return (
     <Container>
+      <Helmet>
+        <title>코인</title>
+      </Helmet>
       <Header>
         <Title>코인</Title>
       </Header>
-      {loading ? (
+      {isLoading ? (
         <Loader>Loading...</Loader>
       ) : (
         <CoinList>
-          {coins.slice(0, 20).map(coin => {
+          {data?.slice(0, 20).map(coin => {
             return (
               <Coin key={coin.id}>
                 <Link to={`/coin/${coin.id}`} state={coin}>

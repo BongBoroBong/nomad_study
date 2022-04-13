@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useParams, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import { useLocation, useParams, Routes, Route, Link, useMatch } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { CoinInterface } from '../Coins';
+import { ICoin } from '../Coins';
 import Price from '../../components/Coin/Price';
 import Chart from '../../components/Coin/Chart';
+import { useQuery } from 'react-query';
+import { fetchCoinInfo, fetchCoinTickers } from '../../libs/api';
+import { Helmet } from 'react-helmet';
 
 const Container = styled.div`
   padding: 0 10px;
@@ -36,9 +39,40 @@ const OverviewItem = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  span:first-of-type {
+    font-size: 10px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
 `;
 const Description = styled.p`
-  margin: 20px 0px;
+  margin: 20px 0;
+`;
+
+const Tabs = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 25px 0;
+  gap: 10px;
+`;
+
+interface ITab {
+  isActive: boolean;
+}
+
+const Tab = styled.span`
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 400;
+  background-color: ${(props: ITab) => (props.isActive ? `red` : `rgba(0,0,0,0.5)`)};
+  padding: 7px 0;
+  border-radius: 10px;
+  a {
+    display: block;
+  }
 `;
 
 interface ITag {
@@ -95,36 +129,63 @@ interface IPriceData {
   beta_value: number;
   first_data_at: string;
   last_updated: string;
-  quotes: object;
+  quotes: IQuotes;
+}
+
+interface IQuotes {
+  USD: IUSD;
+}
+
+interface IUSD {
+  ath_date: number;
+  ath_price: number;
+  market_cap: number;
+  market_cap_change_24h: number;
+  percent_change_1h: number;
+  percent_change_1y: number;
+  percent_change_6h: number;
+  percent_change_7d: number;
+  percent_change_12h: number;
+  percent_change_15m: number;
+  percent_change_24h: number;
+  percent_change_30d: number;
+  percent_change_30m: number;
+  percent_from_price_ath: number;
+  price: number;
+  volume_24h: string;
+  volume_24h_change_24h: number;
 }
 
 function Coin() {
   const location = useLocation();
-  const state = location.state as CoinInterface;
+  const state = location.state as ICoin;
   const { coinId } = useParams();
+  const priceMatch = useMatch('/coin/:coinId/price');
+  const chartMatch = useMatch('/coin/:coinId/chart');
 
-  const [loading, setLoading] = useState(true);
-  const [info, setInfo] = useState<IInfoData>();
-  const [priceInfo, setPriceInfo] = useState<IPriceData>();
+  const { isLoading: infoLoading, data: infoData } = useQuery<IInfoData>(
+    ['info', coinId],
+    () => fetchCoinInfo(coinId!),
+  );
+  const { isLoading: tickersLoading, data: tickersData } = useQuery<IPriceData>(
+    ['tickers', coinId],
+    () => fetchCoinTickers(coinId!),
+    { refetchInterval: 5000 },
+  );
 
-  useEffect(() => {
-    (async () => {
-      const infoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/coins/${coinId}`)
-      ).json();
-      const priceInfoData = await (
-        await fetch(`https://api.coinpaprika.com/v1/tickers/${coinId}`)
-      ).json();
-      setInfo(infoData);
-      setPriceInfo(priceInfoData);
-      setLoading(false);
-    })();
-  }, [coinId]);
+  const loading = infoLoading || tickersLoading;
 
   return (
     <Container>
+      <Helmet>
+        <title>
+          {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
+        </title>
+      </Helmet>
       <Header>
-        <Title>{state.name || 'Loading...'}</Title>
+        <Title>
+          {state?.name ? state.name : loading ? 'Loading...' : infoData?.name}
+        </Title>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>
@@ -133,32 +194,39 @@ function Coin() {
           <Overview>
             <OverviewItem>
               <span>Rank:</span>
-              <span>{info?.rank}</span>
+              <span>{infoData?.rank}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Symbol:</span>
-              <span>${info?.symbol}</span>
+              <span>${infoData?.symbol}</span>
             </OverviewItem>
             <OverviewItem>
-              <span>Open Source:</span>
-              <span>{info?.open_source ? 'Yes' : 'No'}</span>
+              <span>Price</span>
+              <span>{tickersData?.quotes.USD.price.toFixed(3)}</span>
             </OverviewItem>
           </Overview>
-          <Description>{info?.description}</Description>
+          <Description>{infoData?.description}</Description>
           <Overview>
             <OverviewItem>
               <span>Total Suply:</span>
-              <span>{priceInfo?.total_supply}</span>
+              <span>{tickersData?.total_supply}</span>
             </OverviewItem>
             <OverviewItem>
               <span>Max Supply:</span>
-              <span>{priceInfo?.max_supply}</span>
+              <span>{tickersData?.max_supply}</span>
             </OverviewItem>
           </Overview>
-
+          <Tabs>
+            <Tab isActive={priceMatch !== null}>
+              <Link to={`/coin/${coinId}/price`}>Price</Link>
+            </Tab>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/coin/${coinId}/chart`}>Chart</Link>
+            </Tab>
+          </Tabs>
           <Routes>
-            <Route path={`price`} element={<Price />} />
-            <Route path={`chart`} element={<Chart />} />
+            <Route path={`price`} element={<Price coinId={coinId!} />} />
+            <Route path={`chart`} element={<Chart coinId={coinId!} />} />
           </Routes>
         </>
       )}
