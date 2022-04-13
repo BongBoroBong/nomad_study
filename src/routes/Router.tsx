@@ -7,6 +7,7 @@ import Home from './Home';
 import React from 'react';
 import Coin from './Coin';
 import Coins from './Coins';
+import TodoList from '../components/TodoList';
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       />
       <BrowserRouter>
         <Routes>
+          <Route path="/todo" element={<TodoList />} />
           <Route path="/" element={<Home />} />
           <Route path="/movie/:id" element={<Detail />} />
           <Route path="/coin" element={<Coins />} />
