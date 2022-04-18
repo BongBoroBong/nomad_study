@@ -2,25 +2,21 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useSetRecoilState } from 'recoil';
 import { IForm } from '../TodoList';
-import { toDoState } from '../../libs/recoils';
+import { Categories, toDoState } from '../../libs/recoils';
 
 function CreateToDo() {
   const setTodos = useSetRecoilState(toDoState);
 
-  const {
-    register,
-    setValue,
-    watch,
-    handleSubmit,
-    formState: { errors },
-    setError,
-  } = useForm({
+  const { register, setValue, handleSubmit } = useForm({
     defaultValues: {
       toDo: '',
     },
   });
   const onValid = ({ toDo }: IForm) => {
-    setTodos(oldTodo => [{ id: Date.now(), text: toDo, category: 'TODO' }, ...oldTodo]);
+    setTodos(oldTodo => [
+      { id: Date.now(), text: toDo, category: Categories.TODO },
+      ...oldTodo,
+    ]);
     setValue('toDo', '');
   };
 
@@ -29,7 +25,7 @@ function CreateToDo() {
       <input
         {...register('toDo', {
           required: true,
-          minLength: { value: 5, message: 'Your Todo is too short.' },
+          minLength: { value: 2, message: 'Your Todo is too short.' },
         })}
       />
       <button>Add</button>
