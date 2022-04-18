@@ -1,8 +1,30 @@
 import React from 'react';
-import Router from './routes/Router';
+import { useRecoilState } from 'recoil';
+import { hourSelector, minutesState } from './libs/recoils';
 
 function App() {
-  return <Router />;
+  const [minutes, setMinutes] = useRecoilState(minutesState);
+  const [hours, setHours] = useRecoilState(hourSelector);
+
+  const onMinutesChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setMinutes(+event.currentTarget.value);
+  };
+
+  const onHoursChange = (event: React.FormEvent<HTMLInputElement>) => {
+    setHours(+event.currentTarget.value);
+  };
+
+  return (
+    <div>
+      <input
+        type="number"
+        placeholder="Minutes"
+        value={minutes}
+        onChange={onMinutesChange}
+      />
+      <input type="number" placeholder="Hour" value={hours} onChange={onHoursChange} />
+    </div>
+  );
 }
 
 export default App;
