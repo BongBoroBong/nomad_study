@@ -1,7 +1,7 @@
 import React from 'react';
-import DragabbleCard from '../DragabbleCard';
 import { Droppable } from 'react-beautiful-dnd';
 import styled from '@emotion/styled';
+import DragabbleCard from '../DragabbleCard';
 import { ITodo } from '../../libs/recoils';
 
 interface IBoardProps {
