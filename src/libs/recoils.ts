@@ -17,18 +17,29 @@ export const categoryState = atom<Categories>({
   default: Categories.TODO,
 });
 
-export const toDoStates = atom({
-  key: 'toDoStates',
-  default: ['a', 'b', 'c', 'd', 'e', 'f'],
-});
-
 export const toDoState = atom<ITodo[]>({
   key: 'toDoState',
   default: [
     { id: 121212, text: 'a', category: Categories.TODO },
     { id: 232323, text: 'b', category: Categories.TODO },
     { id: 343434, text: 'c', category: Categories.TODO },
+    { id: 565656, text: 'd', category: Categories.DOING },
+    { id: 676767, text: 'e', category: Categories.DOING },
+    { id: 787878, text: 'f', category: Categories.DOING },
+    { id: 898989, text: 'g', category: Categories.DONE },
   ],
+});
+
+export const toDoCategorySelector = selector({
+  key: 'toDoCategorySelector',
+  get: ({ get }) => {
+    const toDos = get(toDoState);
+    return [
+      toDos.filter(todo => todo.category === Categories.TODO),
+      toDos.filter(todo => todo.category === Categories.DOING),
+      toDos.filter(todo => todo.category === Categories.DONE),
+    ];
+  },
 });
 
 export const toDoSelector = selector({
