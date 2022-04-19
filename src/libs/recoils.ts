@@ -30,15 +30,19 @@ export const toDoState = atom<ITodo[]>({
   ],
 });
 
-export const toDoCategorySelector = selector({
+interface IToDoCategory {
+  [key: string]: ITodo[];
+}
+
+export const toDoCategorySelector = selector<IToDoCategory>({
   key: 'toDoCategorySelector',
   get: ({ get }) => {
     const toDos = get(toDoState);
-    return [
-      toDos.filter(todo => todo.category === Categories.TODO),
-      toDos.filter(todo => todo.category === Categories.DOING),
-      toDos.filter(todo => todo.category === Categories.DONE),
-    ];
+    return {
+      TODO: toDos.filter(todo => todo.category === Categories.TODO),
+      DOING: toDos.filter(todo => todo.category === Categories.DOING),
+      DONE: toDos.filter(todo => todo.category === Categories.DONE),
+    };
   },
 });
 
