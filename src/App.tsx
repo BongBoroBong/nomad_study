@@ -1,18 +1,8 @@
 import React from 'react';
-import styled from '@emotion/styled';
-import { motion } from 'framer-motion';
+import Router from './routes/Router';
 
-const Wrapper = styled(motion.div)`
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  margin: 0 auto;
-  justify-content: space-around;
-  align-items: center;
-  background-color: blue;
-`;
 function App() {
-  return <Wrapper />;
+  return <Router />;
 }
 
 export default App;

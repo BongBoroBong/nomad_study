@@ -1,14 +1,10 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { ThemeProvider } from '@emotion/react';
+import { css, Global, ThemeProvider } from '@emotion/react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { RecoilRoot } from 'recoil';
 import App from './App';
-
-const darkTheme = {
-  textColor: 'whitesmoke',
-  backgroundColor: '#111',
-};
+import { theme } from './libs/theme';
 
 const queryClient = new QueryClient();
 
@@ -18,7 +14,15 @@ root.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
-        <ThemeProvider theme={darkTheme}>
+        <ThemeProvider theme={theme}>
+          <Global
+            styles={css`
+              body {
+                margin: 0;
+                padding: 0;
+              }
+            `}
+          />
           <App />
         </ThemeProvider>
       </RecoilRoot>

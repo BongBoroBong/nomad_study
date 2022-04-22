@@ -1,5 +1,12 @@
-export const darkTheme = {
-  bgColor: '#3F8CF2',
-  borderColor: '#DADFE9',
-  cardBgColor: 'white',
+export const theme = {
+  red: '#E51013',
+  black: {
+    veryDark: '#141414',
+    darker: '#181818',
+    lighter: '#2f2f2f',
+  },
+  white: {
+    lighter: '#fff',
+    darker: '#e5e5e5',
+  },
 };
