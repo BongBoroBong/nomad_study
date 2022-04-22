@@ -4,14 +4,13 @@ import { motion } from 'framer-motion';
 
 const Wrapper = styled(motion.div)`
   display: flex;
-  width: 100%;
+  width: 100vw;
+  height: 100vh;
   margin: 0 auto;
-  justify-content: center;
+  justify-content: space-around;
   align-items: center;
   background-color: blue;
-  height: 100vh;
 `;
-
 function App() {
   return <Wrapper />;
 }
