@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { ReactQueryDevtools } from 'react-query/devtools';
 
 import Detail from './Detail';
 import Home2 from './Home';
@@ -28,7 +27,7 @@ function Router() {
           <Route path="/coin/:coinId/*" element={<Coin />} />
         </Routes>
       </BrowserRouter>
-      <ReactQueryDevtools initialIsOpen={true} />
+      {/*<ReactQueryDevtools initialIsOpen={true} />*/}
     </>
   );
 }
