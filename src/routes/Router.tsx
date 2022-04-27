@@ -17,7 +17,9 @@ function Router() {
       <BrowserRouter>
         <Header />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home />}>
+            <Route path="movies/:movieId" />
+          </Route>
           <Route path="/search" element={<Search />} />
           <Route path="/tv" element={<Tv />} />
           <Route path="/todo" element={<TodoList />} />
